@@ -15,5 +15,5 @@ app.post('/login', (req, res) => {
     res.end();
 });
 app.listen(8000, () => {
-    console.log('Server is connected at port 8000');
+    console.log('Server is connected at http://localhost:8000');
 });
