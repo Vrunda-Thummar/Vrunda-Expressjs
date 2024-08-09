@@ -1,177 +1,41 @@
-// ------------------------------------------- lec_1
-
-// const express = require('express');
-// const app = express();
-
-// app.get('/', (req, res) => {
-//     res.send('Welcome to Express');
-//     res.status(200);
-//     res.end();
-// });
-// app.get('/login', (req, res) => {
-//     res.json({ msg: 'Welcome to Login Page' });
-//     res.end();
-// });
-// app.post('/login', (req, res) => {
-//     res.send('Welcome to Login Post method');
-//     res.end();
-// });
-// app.listen(2304, () => {
-//     console.log('Server is connected at http://localhost:2304');
-// });
-
-
-
-// ----------------------------------------------- lec_2
-
-// const express = require('express');
-// const app = express();
-// // const data = require('./friend.json');
-// const fs = require('fs');
-// const data = fs.readFilesync('./friend.json', 'utf-8');
-// // console.log(data);
-
-// // POST, GET, PUT, PATCH, DELETE
-// Server.get("/", (req,res)=>{
-//     res.write('Welcome to Express Server');
-//     res.end();
-// })
-
-// // Server.get("/", (req,res)=>{
-// //     res.write('GET Method - 1');
-// //     res.end();
-// // })
-
-// Server.post("/", (req,res)=>{
-//     // res.write('Welcome to Post Method');
-//     res.send('<h1>Send Method</h1>');
-// })
-
-// server.put("/", (req,res)=>{
-//     res.json({message: 'Hello'});
-// })
-
-// server.patch("/", (res,req)=>{
-//     res.status(400);
-//     res.json({message:'Hello'})
-// })
-
-// server.get("/user", (req,res)=>{
-//     res.json(json.parse(data));
-// })
-
-// serever.get("/login", (req,res)=>{
-//     res.write('Welcome to Login Page');
-//     res.end();
-// })
-
-// server.listen(2304, ()=>{
-//     console.log('Server Start at http://localhost:2304');   
-// })
-
-
-
-// ------------------------------------------- lec_3 (Middleware)
-
-// const express = require('express');
-// const app = express();
-// const data = require('./friend.json');
-// const fs = require('fs');
-// const data = fs.readFilesync('./friend.json', 'utf-8');
-// console.log(data);
-
-// const Middleware = (req, res, next) => {
-//     // console.log(req.query);
-//     if(req.query.age >= "19")
-//     {
-//         console.log('Success');
-//         next();        
-//     }
-//     else
-//     {
-//         res.json({message: "Sorry....."})
-//     }
-    
-// }
-
-// // server.use(Middleware); //application
-
-// // POST, GET, PUT, PATCH, DELETE
-// Server.get("/", (req,res)=>{
-//     res.write('Welcome to Express Server');
-//     res.end();
-// })
-
-// serever.get("/login", Middleware, (req,res)=>{
-//     res.write('Welcome to Login Page');
-//     res.end();
-// })
-
-// Server.post("/", (req,res)=>{
-//     // res.write('Welcome to Post Method');
-//     res.send('<h1>Send Method</h1>');
-// })
-
-// server.listen(2304, () => {
-//     console.log('server start at http://localhost:2304');
-// })
-
-
-
-// ---------------------------------------------------- lec_4
+// ------------------------------------------------- lec_5
 
 const express = require('express');
-const server = express(); //create server
 const morgan = require('morgan');
+const server = express;
+const users = require('./friend.json');
+// console.log(users);
 
 server.use(morgan('dev'));
-
-const loggerFun = (req, res, next) => {
-    console.log(req.ip, req.url, req.method);
-    next();    
-}
-
-server.use(loggerFun);
-
-// in-built middleware
 server.use(express.json());
-server.use(express.urlencoded({extended: false}));
-server.use("/hello",express.static('public'))
+server.use(express.urlencoded({ extended: false }));
 
-const Middleware = (req, res, next) => {
-    console.log(req.body);
-    next();
-    // console.log(req.query);
-    // if(req.query.age >= "19")
-    // {
-    //     console.log('Success');
-    //     next();        
-    // }
-    // else
-    // {
-    //     res.json({message: "Sorry....."})
-    // }
-    
-}
+server.get("/", (req, res) => {
+    res.send("Welcome to Express Server")
+});
 
-// server.use(Middleware); //application
+// CRUD
+// Create User
+server.post("/user", (req, res) => {
+    // console.log(req.body);
+    users.push(req.body);
+    res.json({ message: "User Added Success" });
+});
 
-// // POST, GET, PUT, PATCH, DELETE
-Server.get("/", (req,res)=>{
-    res.write('Welcome to Express Server');
-    res.end();
-})
+// READ - Get All Users
+server.get("/user", (req, res) => {
+    res.json(users);
+});
 
-serever.get("/login", Middleware, (req,res)=>{
-    res.write('Welcome to Login Page');
-    res.end();
-})
-
-Server.post("/", (req,res)=>{
-    // res.write('Welcome to Post Method');
-    res.send('<h1>Send Method</h1>');
-})
+// READ - Get single Users
+server.get("/user/:id", (req, res) => {
+    let id = +req.params.id;
+    let iteam = users.find((user) => user.id === id)
+    res.json(iteam);
+});
 
 server.listen(2304, () => {
     console.log('server start at http://localhost:2304');
 })
+
+
