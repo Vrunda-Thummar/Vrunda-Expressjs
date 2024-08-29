@@ -2,20 +2,20 @@ const express = require('express');
 const userRoutes = express.Router();
 const {
     registerUser,
-    loginUser,
-    getProfile,
-    updateProfile,
-    specialUser
-} = require("../controller/user.controller");
-const { verifyToken } = require('../helpers/verifyToken')
-const { upload } = require("../helpers/imageUpload")
+    loginUser
+} = require('../controller/user.controller');
+
+userRoutes.get("/register", (req, res) => {
+    res.render("user", { user: {} }); // Pass an empty user object for rendering
+});
+
+userRoutes.get("/login", (req, res) => {
+    res.render("login", { user: {} }); // Pass an empty user object for rendering
+});
 
 
-userRoutes.post("/register", upload.single('profileImage'), registerUser);
-userRoutes.post("/loginUser", loginUser);
-userRoutes.get("/me", verifyToken, getProfile);
-userRoutes.get("/updateProfile", verifyToken, updateProfile);
-userRoutes.post("/specialUser", specialUser);
+userRoutes.post("/login", loginUser);
 
+userRoutes.post("/register", registerUser);
 
 module.exports = userRoutes;

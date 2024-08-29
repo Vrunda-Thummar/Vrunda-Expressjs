@@ -1,41 +1,35 @@
-// ----------------------------------------------------- lec_15
 require("dotenv").config();
 const express = require('express');
-const morgan = require('morgan');
 const server = express();
-const mongoose = require("mongoose");
-const userRoutes = require('./routes/user.routes.js');
-const Portno = process.env.port_No
-const cors = require('cors');
-const path = require('path');
-const ejs = require('ejs');
-// console.log(users);
+const morgan = require('morgan');
+const mongoose = require('mongoose');
+const path = require('path'); 
+const port = process.env.PORT;
+const ejs = require("ejs");
+const userRoutes = require('./routes/user.routes');
 
-// Database Connection
-// mongoose
-//     .connect("mongodb://localhost:27017/db2")
-//     .then(() => console.log("Database connection established successfully."))
-//     .catch((err) => console.log(err));
-server.use(cors());
-server.use(morgan("dev"));
+// Set up EJS as the templating engine
+server.set('view engine', 'ejs');
+server.set('views', path.join(__dirname, 'views'));
+
+// Middlewares
 server.use(express.json());
 server.use(express.urlencoded({ extended: false }));
+server.use(morgan('dev'));
 
-server.use("/public/images", express.static(path.join(__dirname, "public/images")))
-
-server.set("view engine", 'ejs');
+// Database connection
+mongoose
+    .connect("mongodb://localhost:27017/todoProject")
+    .then(() => console.log('Database connection established successfully...'))
+    .catch((err) => console.log(err));
 
 server.get("/", (req, res) => {
-    res.send("Welcome to Express Server")
+    res.send("welcome to todoProject");
 });
 
-server.use("/api/user", userRoutes);
+server.use("/user", userRoutes);
 
-server.listen(Portno, () => {
-    mongoose
-    .connect("mongodb://127.0.0.1:27017/db1")
-    .then(() => console.log("Database connection established successfully."))
-    .catch((err) => console.log(err));
-    console.log(`Server Start At http://localhost:${Portno}`);
-})
-
+// Start server
+server.listen(2309, () => {
+    console.log(`Server is running at http://localhost:2309`);
+});

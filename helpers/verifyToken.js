@@ -1,27 +1,26 @@
 const jwt = require('jsonwebtoken');
 const User = require('../model/user.model');
 
-exports.verifyToken = async (req, res, next) => {
-    try{
-        let authorization = req.headers['authorization'];
-        console.log(authorization);
-        
-        if(!authorization)
-        {
-            return res.json({message: "not authorization"});
+exports.verifyToken = async (req, res , next ) => {
+    try {
+        let authentication = req.headers['authorization'];
+        console.log(authentication);
+
+        if (!authentication) {
+            return res.send("Not authentication");
         }
-        let token = authorization.split(" ")[1];
-        let {userId} = await jwt.verify(token, process.env.JWT_SECRETEKEY);
-        let user = await User.findOne({ _id: userId, isDelete: false});
-        if(!user)
-        {
-            return res.json({message: "user not found"})
+        let token = authentication.split(" ")[1];
+        console.log(token);
+        let { userId } = await jwt.verify(token, process.env.JWT_SECRETE);
+        let user = await User.findOne({ _id: userId, isDelete: false });
+        if (!user) {
+            return res.send("User not found...");
         }
         req.user = user;
         next();
-    }
-    catch(err) {
+
+    } catch (err) {
         console.log(err);
-        res.status(500).json({message: "Server Error"})
+        res.send("Internal server error...");
     }
-}; 
+}
