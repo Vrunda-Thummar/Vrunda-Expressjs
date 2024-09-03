@@ -11,10 +11,10 @@ exports.addNewProduct = async (req, res) => {
             isDelete: false,
         });
         if (product) {
-            return res.status(400).json({ message: 'product already exist.....' });
+            return res.status(400).json({ message: Message.ALREADY_EXIST_PRODUCT });
         }
         product = await Product.create(req.body);
-        res.status(201).json({ product, message: "product Added Success" });
+        res.status(201).json({ product, message: Message.ADD_NEW_PRODUCT });
     }
     catch (err) {
         console.log(err);
