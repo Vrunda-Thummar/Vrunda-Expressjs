@@ -1,10 +1,15 @@
-// const pdetails = require('../Product.json');
-const Product = require("../model/product.model")
+const Product = require("../model/product.model");
+const ProductServices = require("../services/product.service");
+const productServices = new ProductServices();
+const Message = require('../helpers/messages');
+
 
 exports.addNewProduct = async (req, res) => {
     try {
-        let product = await Product.findOne({ title: req.body.title, isDelete: false });
-        console.log(product);
+        let product = await productServices.getProduct({
+            title: req.body.title,
+            isDelete: false,
+        });
         if (product) {
             return res.status(400).json({ message: 'product already exist.....' });
         }
