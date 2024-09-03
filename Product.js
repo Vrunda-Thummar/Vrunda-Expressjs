@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const product = express();
 const mongoose = require('mongoose');
 const productRoutes = require('./routes/product.routes');
+const cartRoutes = require('./routes/cart.routes');
 // console.log(users);
 
 // Database Connection
@@ -21,8 +22,10 @@ product.get("/", (req, res) => {
 });
 
 product.use("/api/pdetails", productRoutes);
+product.use("/api/addtoCart", cartRoutes);
 
-product.listen(2304, () => {
-    console.log('Server Start At http://localhost:2304');
+
+product.listen(2309, () => {
+    console.log('Server Start At http://localhost:2309');
 })
 
